@@ -68,6 +68,7 @@
     // Restore saved entries on load
     window.onload = () => {
       const saved = JSON.parse(localStorage.getItem("journal") || "[]");
+      localStorage.clear();
       saved.forEach(e => addEntry(e.text));
     };
 
