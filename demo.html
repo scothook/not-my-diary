@@ -40,16 +40,15 @@
       return date.toISOString().replace("T", " ").slice(0, 19);
     }
 
-    function addEntry(text) {
-      const now = new Date();
-      const ts = formatTimestamp(now);
+    function addEntry(text, time) {
 
       const entryDiv = document.createElement("div");
       entryDiv.className = "entry";
 
       const tsSpan = document.createElement("span");
       tsSpan.className = "timestamp";
-      tsSpan.textContent = `[${ts}]`;
+
+      tsSpan.textContent = `[${time}]`;
 
       const textSpan = document.createElement("span");
       textSpan.className = "text";
@@ -61,7 +60,7 @@
 
       // Optional: save to localStorage so it's not lost on refresh
       const saved = JSON.parse(localStorage.getItem("journal") || "[]");
-      saved.push({ time: ts, text });
+      saved.push({ time: time, text });
       localStorage.setItem("journal", JSON.stringify(saved));
     }
 
@@ -69,12 +68,12 @@
     window.onload = () => {
       const saved = JSON.parse(localStorage.getItem("journal") || "[]");
       localStorage.clear();
-      saved.forEach(e => addEntry(e.text));
+      saved.forEach(e => addEntry(e.text, e.time));
     };
 
     input.addEventListener("keypress", (e) => {
       if (e.key === "Enter" && input.value.trim()) {
-        addEntry(input.value.trim());
+        addEntry(input.value.trim(), formatTimestamp(new Date()));
         input.value = "";
       }
     });
