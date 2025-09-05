@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Journal</title>
+  <style>
+    body {
+      font-family: monospace;
+      background: #f8f9fa;
+      padding: 20px;
+    }
+    #entries {
+      margin-top: 20px;
+      white-space: pre-wrap;
+    }
+    .entry {
+      display: flex;
+      gap: 10px;
+    }
+    .timestamp {
+      color: #888;
+      flex-shrink: 0;
+      width: 180px; /* keeps them aligned */
+    }
+    .text {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+  <h2>Journal</h2>
+  <input id="input" type="text" placeholder="Type and hit Enter..." autofocus />
+  <div id="entries"></div>
+
+  <script>
+    const input = document.getElementById("input");
+    const entriesDiv = document.getElementById("entries");
+
+    function formatTimestamp(date) {
+      return date.toISOString().replace("T", " ").slice(0, 19);
+    }
+
+    function addEntry(text) {
+      const now = new Date();
+      const ts = formatTimestamp(now);
+
+      const entryDiv = document.createElement("div");
+      entryDiv.className = "entry";
+
+      const tsSpan = document.createElement("span");
+      tsSpan.className = "timestamp";
+      tsSpan.textContent = `[${ts}]`;
+
+      const textSpan = document.createElement("span");
+      textSpan.className = "text";
+      textSpan.textContent = text;
+
+      entryDiv.appendChild(tsSpan);
+      entryDiv.appendChild(textSpan);
+      entriesDiv.appendChild(entryDiv);
+
+      // Optional: save to localStorage so it's not lost on refresh
+      const saved = JSON.parse(localStorage.getItem("journal") || "[]");
+      saved.push({ time: ts, text });
+      localStorage.setItem("journal", JSON.stringify(saved));
+    }
+
+    // Restore saved entries on load
+    window.onload = () => {
+      const saved = JSON.parse(localStorage.getItem("journal") || "[]");
+      saved.forEach(e => addEntry(e.text));
+    };
+
+    input.addEventListener("keypress", (e) => {
+      if (e.key === "Enter" && input.value.trim()) {
+        addEntry(input.value.trim());
+        input.value = "";
+      }
+    });
+  </script>
+</body>
+</html>
