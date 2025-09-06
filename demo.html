@@ -9,28 +9,45 @@
       background: #f8f9fa;
       padding: 20px;
     }
+    #input {
+      font-family: monospace;
+      font-size: 1em;
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      padding: 0;
+      margin: 0;
+    }
+    #inputRow {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 1px;
+      margin-top: 1px;
+    }
     #entries {
-      margin-top: 20px;
-      white-space: pre-wrap;
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 1px;
     }
     .entry {
-      display: flex;
-      gap: 10px;
+      display: contents;
     }
     .timestamp {
       color: #888;
-      flex-shrink: 0;
-      width: 180px; /* keeps them aligned */
     }
     .text {
-      flex: 1;
+      white-space: pre-wrap;
     }
   </style>
 </head>
 <body>
   <h2>Journal</h2>
-  <input id="input" type="text" placeholder="Type and hit Enter..." autofocus />
   <div id="entries"></div>
+  <div id="inputRow">
+    <span class="timestamp"></span>
+    <input id="input" type="text" placeholder=">" autofocus />
+  </div>
 
   <script>
     const input = document.getElementById("input");
@@ -47,7 +64,6 @@
 
       const tsSpan = document.createElement("span");
       tsSpan.className = "timestamp";
-
       tsSpan.textContent = `[${time}]`;
 
       const textSpan = document.createElement("span");
@@ -58,7 +74,7 @@
       entryDiv.appendChild(textSpan);
       entriesDiv.appendChild(entryDiv);
 
-      // Optional: save to localStorage so it's not lost on refresh
+      // Save to localStorage
       const saved = JSON.parse(localStorage.getItem("journal") || "[]");
       saved.push({ time: time, text });
       localStorage.setItem("journal", JSON.stringify(saved));
