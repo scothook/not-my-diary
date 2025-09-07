@@ -51,6 +51,7 @@ function App() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyPress}
+          autoFocus
         />
       </div>
     </>
