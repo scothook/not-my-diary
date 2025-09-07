@@ -7,14 +7,11 @@ interface Entry {
 }
 
 function App() {
-  const [entries, setEntries] = useState<Entry[]>([]);
+  const [entries, setEntries] = useState<Entry[]>(() => {
+    const saved = localStorage.getItem("journal");
+    return saved ? JSON.parse(saved) : [];
+  });
   const [input, setInput] = useState<string>('');
-
-  // load entries
-  useEffect(() => {
-    const saved: Entry[] = JSON.parse(localStorage.getItem("journal") || "[]");
-    setEntries(saved);
-  }, []);
 
   // save entries
   useEffect(() => {
