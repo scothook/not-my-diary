@@ -11,9 +11,7 @@
     }
     #inputRow {
       display: grid;
-      grid-template-columns: 180px 1fr;
-      gap: 1px;
-      margin-top: 1px;
+      grid-template-columns: 23ch 1fr;
     }
     #input {
       font-family: monospace;
@@ -23,6 +21,7 @@
       outline: none;
       background: transparent;
       padding: 0;
+      padding-left: 10px;
       margin: 0;
     }
     #input:hover {
@@ -30,17 +29,19 @@
     }
     #entries {
       display: grid;
-      grid-template-columns: 180px 1fr;
-      gap: 1px;
+      grid-template-columns: 23ch 1fr;
     }
     .entry {
       display: contents;
     }
     .timestamp {
       color: #888;
+      border-right: 1px solid #aaa;
+      padding-right: 10px;
     }
     .text {
       white-space: pre-wrap;
+      padding-left: 10px;
     }
     .text:hover {
       background: #cbe1f5;
@@ -94,8 +95,8 @@
     };
 
     input.addEventListener("keypress", (e) => {
-      if (e.key === "Enter" && input.value.trim()) {
-        addEntry(input.value.trim(), formatTimestamp(new Date()));
+      if (e.key === "Enter") {
+        addEntry(input.value, formatTimestamp(new Date()));
         input.value = "";
       }
     });
