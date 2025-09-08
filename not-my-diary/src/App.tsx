@@ -12,13 +12,37 @@ function App() {
     try {
       const response = await fetch("https://not-my-diary-backend-production.up.railway.app/api/entries");
       if (!response.ok) throw new Error("Failed to fetch entries");
-      const data = await response.json();
+
+      const rawData: { created_at: string; content: string }[] = await response.json();
+
+      const data: Entry[] = rawData.map(e => ({
+        timestamp: e.created_at,
+        text: e.content,
+      }));
+
       console.log(data);
-      //setEntries(await response.json());
+      setEntries(data);
     } catch (err) {
       console.error(err);
     }
   };
+
+  const saveNewEntries = async (newEntries: Entry[]) => {
+    const res = await fetch("https://not-my-diary-backend-production.up.railway.app/api/entries/batch",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newEntries),
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Failed to save new entries");
+    }
+
+    const saved = await res.json();
+    return saved;
+  }
 
   const [entries, setEntries] = useState<Entry[]>(() => {
     loadEntries();
@@ -29,7 +53,8 @@ function App() {
 
   // save entries
   useEffect(() => {
-    localStorage.setItem("journal", JSON.stringify(entries));
+    //localStorage.setItem("journal", JSON.stringify(entries));
+    saveNewEntries(entries).catch(console.error);
   }, [entries]);
 
   const formatTimestamp = (date: Date) =>
