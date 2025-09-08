@@ -46,6 +46,7 @@ app.post("/api/entries/batch", async (req, res) => {
   const query = `
     INSERT INTO entries (created_at, content)
     VALUES ${placeholders.join(", ")}
+    ON CONFLICT DO NOTHING
     RETURNING *;
   `;
 
