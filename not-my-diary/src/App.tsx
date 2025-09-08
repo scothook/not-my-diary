@@ -7,7 +7,21 @@ interface Entry {
 }
 
 function App() {
+
+  const loadEntries = async () => {
+    try {
+      const response = await fetch("https://not-my-diary-backend-production.up.railway.app/api/entries");
+      if (!response.ok) throw new Error("Failed to fetch entries");
+      const data = await response.json();
+      console.log(data);
+      //setEntries(await response.json());
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const [entries, setEntries] = useState<Entry[]>(() => {
+    loadEntries();
     const saved = localStorage.getItem("journal");
     return saved ? JSON.parse(saved) : [];
   });

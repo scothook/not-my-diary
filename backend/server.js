@@ -1,24 +1,24 @@
-import routes from "./routes/index.js";
+//import routes from "./routes/index.js";
 const express = require("express");
 const cors = require("cors");
 const { Pool } = require("pg");
 require('dotenv').config({ path: './.env' });
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 app.use(cors()); // Allow cross-origin requests
 app.use(express.json()); // Middleware to parse JSON
-app.use("/api", routes);
+//app.use("/api", routes);
 
 // Database Connection Pool
 const pool = new Pool({
-  connectionString: process.env.DATABASE_PUBLIC_URL,
+  connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }, // Required for Railway SSL
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on ${PORT}`);
 });
 
 app.get("/api/entries", async (req, res) => {
