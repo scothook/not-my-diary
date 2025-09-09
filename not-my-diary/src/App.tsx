@@ -58,7 +58,7 @@ function App() {
   }, [entries]);
 
   const formatTimestamp = (date: Date) =>
-    date.toISOString().replace("T", " ").slice(0, 19);
+    date.toISOString().replace("T", " ");
   
   const addEntry = (text: string) => {
     const newEntry = { timestamp: formatTimestamp(new Date()), text };
