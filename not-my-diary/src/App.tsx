@@ -59,6 +59,10 @@ function App() {
 
   const formatTimestamp = (date: Date) =>
     date.toISOString().replace("T", " ");
+
+  const formatLocalTime = (utcString: string) => {
+    return new Date(utcString).toLocaleString();
+  }
   
   const addEntry = (text: string) => {
     const newEntry = { timestamp: formatTimestamp(new Date()), text };
@@ -78,7 +82,7 @@ function App() {
       <div id="entries">
         {entries.map((entry, idx) => (
           <div key={idx} className="entry">
-            <span className="timestamp">[{entry.timestamp}]</span>
+            <span className="timestamp">[{formatLocalTime(entry.timestamp)}]</span>
             <span className="text">{entry.text}</span>
           </div>
         ))}
