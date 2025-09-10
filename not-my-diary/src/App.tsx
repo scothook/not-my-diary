@@ -92,9 +92,18 @@ function App() {
 
   useDebouncedSave(entries, 5000, saveNewEntries);
 
+  function SaveButton({ onSave }: { onSave: () => void}) {
+    return (
+      <button className="saveButton" onClick={onSave}>
+        🖫
+      </button>
+    );
+  }
+
   return (
     <>
       <h2>not my diary</h2>
+      <SaveButton onSave={() => saveNewEntries(entries)}/>
       <div id="entries">
         {entries.map((entry, idx) => (
           <div key={idx} className="entry">

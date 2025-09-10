@@ -40,3 +40,31 @@ body {
 .text:hover {
   background: #cbe1f5;
 }
+
+.saveButton {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 1000; /* keep it above everything */
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #2563eb; /* blue */
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+  font-size: x-large;
+}
+
+.saveButton:hover {
+  background: #1d4ed8;
+}
+
+.saveButton:active {
+  transform: scale(0.95);
+}
