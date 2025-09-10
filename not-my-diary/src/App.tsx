@@ -8,6 +8,9 @@ interface Entry {
 
 function App() {
 
+  const [entries, setEntries] = useState<Entry[]>([]);
+  const [input, setInput] = useState<string>('');
+
   const loadEntries = async () => {
     try {
       const response = await fetch("https://not-my-diary-backend-production.up.railway.app/api/entries");
@@ -27,6 +30,10 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    loadEntries();
+  }, []);
+
   const saveNewEntries = async (newEntries: Entry[]) => {
     const res = await fetch("https://not-my-diary-backend-production.up.railway.app/api/entries/batch",
       {
@@ -42,18 +49,11 @@ function App() {
 
     const saved = await res.json();
     return saved;
-  }
-
-  const [entries, setEntries] = useState<Entry[]>(() => {
-    loadEntries();
-    const saved = localStorage.getItem("journal");
-    return saved ? JSON.parse(saved) : [];
-  });
-  const [input, setInput] = useState<string>('');
+  };
 
   // save entries
   useEffect(() => {
-    //localStorage.setItem("journal", JSON.stringify(entries));
+    if (entries.length === 0) return;
     saveNewEntries(entries).catch(console.error);
   }, [entries]);
 
@@ -62,19 +62,19 @@ function App() {
 
   const formatLocalTime = (utcString: string) => {
     return new Date(utcString).toLocaleString();
-  }
+  };
   
   const addEntry = (text: string) => {
     const newEntry = { timestamp: formatTimestamp(new Date()), text };
     setEntries((prev) => [...prev, newEntry]);
     setInput("");
-  }
+  };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       addEntry(input);
     }
-  }
+  };
 
   return (
     <>
