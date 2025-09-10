@@ -51,12 +51,6 @@ function App() {
     return saved;
   };
 
-  // save entries
-  useEffect(() => {
-    if (entries.length === 0) return;
-    saveNewEntries(entries).catch(console.error);
-  }, [entries]);
-
   const formatTimestamp = (date: Date) =>
     date.toISOString().replace("T", " ");
 
@@ -82,6 +76,21 @@ function App() {
       addEntry(input);
     }
   };
+
+  function useDebouncedSave(values: Entry[], delay: number, saveFn: (values: Entry[]) => void) {
+    useEffect(() => {
+      if (values.length === 0) return;
+
+      const handler = setTimeout(() => {
+        saveFn(values);
+      }, delay);
+
+      return () => clearTimeout(handler);
+
+    }, [values, delay, saveFn]);
+  }
+
+  useDebouncedSave(entries, 5000, saveNewEntries);
 
   return (
     <>
