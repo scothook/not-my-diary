@@ -10,6 +10,7 @@ function App() {
 
   const [entries, setEntries] = useState<Entry[]>([]);
   const [input, setInput] = useState<string>('');
+  const [timestampsVisible, setTimestampsVisible] = useState<boolean>(true);
 
   const loadEntries = async () => {
     try {
@@ -100,28 +101,59 @@ function App() {
     );
   }
 
+  function ToggleTimestampsVisibility() {
+    setTimestampsVisible(!timestampsVisible);
+  }
+
   return (
     <>
       <h2>not my diary</h2>
       <SaveButton onSave={() => saveNewEntries(entries)}/>
-      <div id="entries">
-        {entries.map((entry, idx) => (
-          <div key={idx} className="entry">
-            <span className="timestamp">[{formatLocalTime(entry.timestamp)}]</span>
-            <span className="text">{entry.text}</span>
+      {timestampsVisible ? (
+        // visible timestamps
+        <>
+          <div id="entries">
+            {entries.map((entry, idx) => (
+              <div key={idx} className="entry">
+                <span className="timestamp" onClick={() => ToggleTimestampsVisibility()}>[{formatLocalTime(entry.timestamp)}]</span>
+                <span className="text">{entry.text}</span>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div className="inputRow">
-        <span className="timestamp"></span>
-        <input
-          className="input"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyPress}
-          autoFocus
-        />
-      </div>
+          <div className="inputRow">
+            <span className="timestamp" onClick={() => ToggleTimestampsVisibility()}></span>
+            <input
+              className="input"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyPress}
+              autoFocus
+            />
+          </div>
+        </>
+      ) : (
+        // hidden timestamps
+        <>
+          <div id="entriesNoTimestamps">
+            {entries.map((entry, idx) => (
+              <div key={idx} className="entry">
+                <span className="timestamp" onClick={() => ToggleTimestampsVisibility()}>[]</span>
+                <span className="text">{entry.text}</span>
+              </div>
+            ))}
+          </div>
+          <div className="inputRowNoTimestamps">
+            <span className="timestamp" onClick={() => ToggleTimestampsVisibility()}></span>
+            <input
+              className="input"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyPress}
+              autoFocus
+            />
+          </div>
+        </>
+      )}  
     </>
   )
 }

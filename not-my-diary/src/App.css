@@ -7,6 +7,10 @@ body {
   display: grid;
   grid-template-columns: 27ch 1fr;
 }
+.inputRowNoTimestamps {
+  display: grid;
+  grid-template-columns: 4ch 1fr;
+}
 .input {
   font-family: monospace;
   font-size: 1em;
@@ -17,6 +21,7 @@ body {
   padding: 0;
   padding-left: 10px;
   margin: 0;
+  cursor: pointer;
 }
 .input:hover {
   background: #cbe1f5;
@@ -25,6 +30,11 @@ body {
   display: grid;
   grid-template-columns: 27ch 1fr;
 }
+#entriesNoTimestamps {
+  display: grid;
+  grid-template-columns: 4ch 1fr;
+  padding-right: 10px;
+}
 .entry {
   display: contents;
 }
@@ -32,6 +42,7 @@ body {
   color: #888;
   border-right: 1px solid #aaa;
   padding-right: 10px;
+  cursor: pointer;
 }
 .text {
   white-space: pre-wrap;
