@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import './App.css'
+import Login from './components/Login';
 
 interface Entry {
   timestamp: string;
@@ -118,6 +119,7 @@ function App() {
     <>
       <h2>not my diary</h2>
       <SaveButton onSave={() => saveNewEntries(entries)}/>
+      <Login />
       {timestampsVisible ? (
         // visible timestamps
         <>
