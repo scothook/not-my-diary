@@ -6,6 +6,8 @@ interface Entry {
   text: string;
 }
 
+const token = localStorage.getItem("token");
+
 function App() {
 
   const [entries, setEntries] = useState<Entry[]>([]);
@@ -14,7 +16,11 @@ function App() {
 
   const loadEntries = async () => {
     try {
-      const response = await fetch("https://not-my-diary-backend-production.up.railway.app/api/entries");
+      const response = await fetch("https://not-my-diary-backend-production.up.railway.app/api/entries", {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
       if (!response.ok) throw new Error("Failed to fetch entries");
 
       const rawData: { created_at: string; content: string }[] = await response.json();
@@ -39,7 +45,10 @@ function App() {
     const res = await fetch("https://not-my-diary-backend-production.up.railway.app/api/entries/batch",
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify(newEntries),
       }
     );
