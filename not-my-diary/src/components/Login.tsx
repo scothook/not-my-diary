@@ -1,6 +1,10 @@
 import { useState } from "react";
 
-export default function Login() {
+interface LoginProps {
+  sendUserId: (userId: number) => void;
+}
+
+export default function Login({ sendUserId }: LoginProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -24,6 +28,7 @@ export default function Login() {
 
       // Save token to localStorage
       localStorage.setItem("token", data.token);
+      sendUserId(data.userId);
       alert("Login successful!");
     } catch (err) {
       console.error("Network error:", err);

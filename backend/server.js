@@ -113,13 +113,13 @@ app.post("/api/entries/batch", authenticateToken, async (req, res) => {
 
   const values = [];
   const placeholders = entries.map((e, i) => {
-    const base = i * 2;
-    values.push(e.timestamp, e.text);
-    return `($${base + 1}, $${base + 2})`;
+    const base = i * 3;
+    values.push(e.timestamp, e.text, e.userId);
+    return `($${base + 1}, $${base + 2}), $${base + 3}`;
   });
 
   const query = `
-    INSERT INTO entries (created_at, content)
+    INSERT INTO entries (created_at, content, user_id)
     VALUES ${placeholders.join(", ")}
     ON CONFLICT DO NOTHING
     RETURNING *;

@@ -5,12 +5,14 @@ import Login from './components/Login';
 interface Entry {
   timestamp: string;
   text: string;
+  userId: number;
 }
 
 const token = localStorage.getItem("token");
 
 function App() {
 
+  const [userId, setUserId] = useState<number | null>(null);
   const [entries, setEntries] = useState<Entry[]>([]);
   const [input, setInput] = useState<string>('');
   const [timestampsVisible, setTimestampsVisible] = useState<boolean>(true);
@@ -24,11 +26,12 @@ function App() {
       });
       if (!response.ok) throw new Error("Failed to fetch entries");
 
-      const rawData: { created_at: string; content: string }[] = await response.json();
+      const rawData: { created_at: string; content: string; user_id: number; }[] = await response.json();
 
       const data: Entry[] = rawData.map(e => ({
         timestamp: e.created_at,
         text: e.content,
+        userId: e.user_id,
       }));
 
       console.log(data);
@@ -40,7 +43,7 @@ function App() {
 
   useEffect(() => {
     loadEntries();
-  }, []);
+  }, [userId]);
 
   const saveNewEntries = async (newEntries: Entry[]) => {
     const res = await fetch("https://not-my-diary-backend-production.up.railway.app/api/entries/batch",
@@ -62,6 +65,10 @@ function App() {
     return saved;
   };
 
+  const handleUserId = (userId: number) => {
+    setUserId(userId);
+  };
+
   const formatTimestamp = (date: Date) =>
     date.toISOString().replace("T", " ");
 
@@ -77,7 +84,7 @@ function App() {
   };
   
   const addEntry = (text: string) => {
-    const newEntry = { timestamp: formatTimestamp(new Date()), text };
+    const newEntry = { timestamp: formatTimestamp(new Date()), text, userId: userId || 0};
     setEntries((prev) => [...prev, newEntry]);
     setInput("");
   };
@@ -119,7 +126,8 @@ function App() {
     <>
       <h2>not my diary</h2>
       <SaveButton onSave={() => saveNewEntries(entries)}/>
-      <Login />
+        userId: {userId}
+      <Login sendUserId={handleUserId}/>
       {timestampsVisible ? (
         // visible timestamps
         <>
