@@ -115,7 +115,7 @@ app.post("/api/entries/batch", authenticateToken, async (req, res) => {
   const placeholders = entries.map((e, i) => {
     const base = i * 3;
     values.push(e.timestamp, e.text, e.userId);
-    return `($${base + 1}, $${base + 2}), $${base + 3}`;
+    return `($${base + 1}, $${base + 2}, $${base + 3})`;
   });
 
   const query = `
