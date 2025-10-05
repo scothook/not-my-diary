@@ -76,6 +76,7 @@ app.post("/api/login", async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials" });
 
     const user = result.rows[0];
+    const userId = user.id;
     const valid = await bcrypt.compare(password, user.password_hash);
 
     if (!valid) return res.status(401).json({ error: "Invalid credentials" });
@@ -86,7 +87,7 @@ app.post("/api/login", async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    res.json({ token });
+    res.json({ userId, token });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Login failed" });
