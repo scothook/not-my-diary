@@ -93,10 +93,21 @@ app.post("/api/login", async (req, res) => {
     res.status(500).json({ error: "Login failed" });
   }
 });
-
+/*
 app.get("/api/entries", authenticateToken, async (req, res) => {
     try {
         const result = await pool.query("SELECT * FROM entries ORDER BY created_at ASC;");
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Database query failed"});
+    }
+}); */
+
+app.get("/api/entries/", authenticateToken, async (req, res) => {
+    const userId = req.user.userId;
+    try {
+        const result = await pool.query("SELECT * FROM entries WHERE user_id = $1 ORDER BY created_at ASC;", [userId]);
         res.json(result.rows);
     } catch (err) {
         console.error(err);
