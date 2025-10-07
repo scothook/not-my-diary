@@ -138,7 +138,6 @@ function App() {
     <>
       <h2>not my diary</h2>
       <SaveButton onSave={() => saveNewEntries(entries)}/>
-        userId: {userId}
       <Login sendUserId={handleUserId}/>
       {timestampsVisible ? (
         // visible timestamps
