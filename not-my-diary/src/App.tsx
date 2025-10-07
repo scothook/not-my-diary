@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import Login from './components/Login';
+import CenteredModal from './components/CenteredModal';
 
 interface Entry {
   timestamp: string;
@@ -138,7 +139,9 @@ function App() {
     <>
       <h2>not my diary</h2>
       <SaveButton onSave={() => saveNewEntries(entries)}/>
-      <Login sendUserId={handleUserId}/>
+      <CenteredModal isOpen={userId === null} onClose={() => {}} title="Login Required">
+        <Login sendUserId={handleUserId}/>
+      </CenteredModal>
       {timestampsVisible ? (
         // visible timestamps
         <>
