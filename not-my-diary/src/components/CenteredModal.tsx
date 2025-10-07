@@ -54,12 +54,6 @@ export default function CenteredModal({ isOpen, onClose, title, children }: Moda
         </div>
 
         <div className={styles.content}>{children}</div>
-
-        <div className={styles.footer}>
-          <button onClick={onClose} className={styles.footerButton}>
-            Close
-          </button>
-        </div>
       </div>
     </div>
   );

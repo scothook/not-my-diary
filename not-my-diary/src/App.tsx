@@ -139,7 +139,7 @@ function App() {
     <>
       <h2>not my diary</h2>
       <SaveButton onSave={() => saveNewEntries(entries)}/>
-      <CenteredModal isOpen={userId === null} onClose={() => {}} title="Login Required">
+      <CenteredModal isOpen={userId === null} onClose={() => {}} title="Login">
         <Login sendUserId={handleUserId}/>
       </CenteredModal>
       {timestampsVisible ? (

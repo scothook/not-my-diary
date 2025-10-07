@@ -16,12 +16,12 @@
 .modal {
   position: relative;
   z-index: 1010;
-  max-width: 600px;
+  max-width: 200px;
   width: 90%;
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  padding: 1.5rem;
+  padding: 2rem;
 }
 
 .header {
