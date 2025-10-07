@@ -76,6 +76,7 @@ app.post("/api/login", async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials" });
 
     const user = result.rows[0];
+    const userId = user.id;
     const valid = await bcrypt.compare(password, user.password_hash);
 
     if (!valid) return res.status(401).json({ error: "Invalid credentials" });
@@ -86,16 +87,27 @@ app.post("/api/login", async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    res.json({ token });
+    res.json({ userId, token });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Login failed" });
   }
 });
-
+/*
 app.get("/api/entries", authenticateToken, async (req, res) => {
     try {
         const result = await pool.query("SELECT * FROM entries ORDER BY created_at ASC;");
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Database query failed"});
+    }
+}); */
+
+app.get("/api/entries/", authenticateToken, async (req, res) => {
+    const userId = req.user.userId;
+    try {
+        const result = await pool.query("SELECT * FROM entries WHERE user_id = $1 ORDER BY created_at ASC;", [userId]);
         res.json(result.rows);
     } catch (err) {
         console.error(err);
@@ -112,13 +124,13 @@ app.post("/api/entries/batch", authenticateToken, async (req, res) => {
 
   const values = [];
   const placeholders = entries.map((e, i) => {
-    const base = i * 2;
-    values.push(e.timestamp, e.text);
-    return `($${base + 1}, $${base + 2})`;
+    const base = i * 3;
+    values.push(e.timestamp, e.text, e.userId);
+    return `($${base + 1}, $${base + 2}, $${base + 3})`;
   });
 
   const query = `
-    INSERT INTO entries (created_at, content)
+    INSERT INTO entries (created_at, content, user_id)
     VALUES ${placeholders.join(", ")}
     ON CONFLICT DO NOTHING
     RETURNING *;
