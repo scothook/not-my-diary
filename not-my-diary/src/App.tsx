@@ -19,7 +19,7 @@ function App() {
 
   const loadEntries = async () => {
     try {
-      const response = await fetch("https://not-my-diary-backend-production.up.railway.app/api/entries", {
+      const response = await fetch(`https://not-my-diary-backend-production.up.railway.app/api/entries/`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -40,6 +40,18 @@ function App() {
       console.error(err);
     }
   };
+
+  function decodeJwt(token: string) {
+    const payload = token.split(".")[1];
+    return JSON.parse(atob(payload));
+  }
+
+  useEffect(() => {
+    if (token) {
+      const decodedJwt = decodeJwt(token);
+      setUserId(decodedJwt.userId);
+    }
+  }, []);
 
   useEffect(() => {
     loadEntries();
