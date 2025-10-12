@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import Login from './components/Login';
 import CenteredModal from './components/CenteredModal';
-import { dateToTimestampString, timestampStringToLocalTime } from './utils/time.tsx';
-import { decodeJwt } from './utils/jwt.tsx';
+import { useEntries } from './hooks/useEntries';
+import { dateToTimestampString, timestampStringToLocalTime } from './utils/time.ts';
+import { decodeJwt } from './utils/jwt.ts';
 
 interface Entry {
   timestamp: string;
@@ -14,33 +15,11 @@ interface Entry {
 function App() {
 
   const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
+  const { entries, setEntries, loadEntries, saveNewEntries } = useEntries(token);
   const [userId, setUserId] = useState<number | null>(null);
-  const [entries, setEntries] = useState<Entry[]>([]);
+  //const [entries, setEntries] = useState<Entry[]>([]);
   const [input, setInput] = useState<string>('');
   const [timestampsVisible, setTimestampsVisible] = useState<boolean>(true);
-
-  const loadEntries = async () => {
-    try {
-      const response = await fetch(`https://not-my-diary-backend-production.up.railway.app/api/entries/`, {
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      });
-      if (!response.ok) throw new Error("Failed to fetch entries");
-
-      const rawData: { created_at: string; content: string; user_id: number; }[] = await response.json();
-
-      const data: Entry[] = rawData.map(e => ({
-        timestamp: e.created_at,
-        text: e.content,
-        userId: e.user_id,
-      }));
-
-      setEntries(data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   useEffect(() => {
     setToken(localStorage.getItem("token"));
@@ -56,26 +35,6 @@ function App() {
     loadEntries();
   }, [token, userId]);
 
-  const saveNewEntries = async (newEntries: Entry[]) => {
-    const res = await fetch("https://not-my-diary-backend-production.up.railway.app/api/entries/batch",
-      {
-        method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify(newEntries),
-      }
-    );
-
-    if (!res.ok) {
-      throw new Error("Failed to save new entries");
-    }
-
-    const saved = await res.json();
-    return saved;
-  };
-
   const handleUserId = (userId: number) => {
     setUserId(userId);
     setToken(localStorage.getItem("token"));
@@ -84,7 +43,7 @@ function App() {
   
   const addEntry = (text: string) => {
     const newEntry = { timestamp: dateToTimestampString(new Date()), text, userId: userId || 0};
-    setEntries((prev) => [...prev, newEntry]);
+    setEntries(prev => [...prev, newEntry]);
     setInput("");
   };
 
