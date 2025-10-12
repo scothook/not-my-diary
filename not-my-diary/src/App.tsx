@@ -6,6 +6,7 @@ import { useEntries } from './hooks/useEntries';
 import { useDebouncedSave } from './hooks/useDebouncedSave.ts';
 import { useAuth } from './hooks/useAuth.ts';
 import { dateToTimestampString, timestampStringToLocalTime } from './utils/time.ts';
+import { isTokenValid } from './utils/jwt.ts';
 
 function App() {
   const { token, userId } = useAuth();
@@ -41,7 +42,7 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
+    if(isTokenValid(token)) {
       loadEntries();
     }
   }, []);
@@ -50,7 +51,7 @@ function App() {
     <>
       <h2>not my diary</h2>
       <SaveButton onSave={() => saveNewEntries(entries)}/>
-      <CenteredModal isOpen={userId === null} onClose={() => {}} title="Login">
+      <CenteredModal isOpen={!isTokenValid(token)} onClose={() => {}} title="Login">
         <Login />
       </CenteredModal>
       {timestampsVisible ? (
