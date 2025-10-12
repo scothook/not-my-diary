@@ -9,10 +9,9 @@ interface Entry {
   userId: number;
 }
 
-const token = localStorage.getItem("token");
-
 function App() {
 
+  const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
   const [userId, setUserId] = useState<number | null>(null);
   const [entries, setEntries] = useState<Entry[]>([]);
   const [input, setInput] = useState<string>('');
@@ -35,7 +34,6 @@ function App() {
         userId: e.user_id,
       }));
 
-      console.log(data);
       setEntries(data);
     } catch (err) {
       console.error(err);
@@ -48,6 +46,7 @@ function App() {
   }
 
   useEffect(() => {
+    setToken(localStorage.getItem("token"));
     if (token) {
       const decodedJwt = decodeJwt(token);
       setUserId(decodedJwt.userId);
@@ -55,8 +54,10 @@ function App() {
   }, []);
 
   useEffect(() => {
+    if (!token) return;
+    setToken(localStorage.getItem("token"));
     loadEntries();
-  }, [userId]);
+  }, [token, userId]);
 
   const saveNewEntries = async (newEntries: Entry[]) => {
     const res = await fetch("https://not-my-diary-backend-production.up.railway.app/api/entries/batch",
@@ -80,6 +81,8 @@ function App() {
 
   const handleUserId = (userId: number) => {
     setUserId(userId);
+    setToken(localStorage.getItem("token"));
+    loadEntries();
   };
 
   const formatTimestamp = (date: Date) =>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import styles from "./Login.module.css";
 
 interface LoginProps {
   sendUserId: (userId: number) => void;
@@ -22,17 +23,14 @@ export default function Login({ sendUserId }: LoginProps) {
 
       if (!res.ok) {
         console.error(data.error);
-        alert(data.error);
         return;
       }
 
       // Save token to localStorage
       localStorage.setItem("token", data.token);
       sendUserId(data.userId);
-      alert("Login successful!");
     } catch (err) {
       console.error("Network error:", err);
-      alert("Network error, check console.");
     }
   };
 
@@ -56,7 +54,7 @@ export default function Login({ sendUserId }: LoginProps) {
           required
         />
       </div>
-      <button type="submit" style={{ marginTop: 10 }}>Login</button>
+      <button type="submit" className={styles.button}>Login</button>
     </form>
   );
 }
