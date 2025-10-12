@@ -3,6 +3,7 @@ import './App.css';
 import Login from './components/Login';
 import CenteredModal from './components/CenteredModal';
 import { dateToTimestampString, timestampStringToLocalTime } from './utils/time.tsx';
+import { decodeJwt } from './utils/jwt.tsx';
 
 interface Entry {
   timestamp: string;
@@ -40,11 +41,6 @@ function App() {
       console.error(err);
     }
   };
-
-  function decodeJwt(token: string) {
-    const payload = token.split(".")[1];
-    return JSON.parse(atob(payload));
-  }
 
   useEffect(() => {
     setToken(localStorage.getItem("token"));
