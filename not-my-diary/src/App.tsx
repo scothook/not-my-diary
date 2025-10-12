@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
 import './App.css';
+import { useState, useEffect } from 'react';
 import Login from './components/Login';
 import CenteredModal from './components/CenteredModal';
 import { useEntries } from './hooks/useEntries';
