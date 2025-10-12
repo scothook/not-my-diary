@@ -1,15 +1,18 @@
 import { useState } from "react";
+import styles from "./Login.module.css";
 
-interface LoginProps {
-  sendUserId: (userId: number) => void;
+interface LoginResponse {
+  token: string;
 }
 
-export default function Login({ sendUserId }: LoginProps) {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null);
 
     try {
       const res = await fetch("https://not-my-diary-backend-production.up.railway.app/api/login", {
@@ -18,46 +21,45 @@ export default function Login({ sendUserId }: LoginProps) {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await res.json();
+      const data: LoginResponse = await res.json();
 
       if (!res.ok) {
-        console.error(data.error);
-        alert(data.error);
+        setError("Invalid credentials");
         return;
       }
 
       // Save token to localStorage
       localStorage.setItem("token", data.token);
-      sendUserId(data.userId);
-      alert("Login successful!");
+      window.location.reload();
     } catch (err) {
       console.error("Network error:", err);
-      alert("Network error, check console.");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ maxWidth: 300, margin: "auto" }}>
-      <h2>Login</h2>
-      <div>
-        <label>Email:</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label>Password:</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </div>
-      <button type="submit" style={{ marginTop: 10 }}>Login</button>
-    </form>
+    <div className="login-container" style={{ maxWidth: 300, margin: "auto" }}>
+      <form onSubmit={handleLogin}>
+        <div>
+          <label>Email:</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Password:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit" className={styles.button}>Login</button>
+      </form>
+      {error && <p className={styles.error}>{error}</p>}
+    </div>
   );
 }
