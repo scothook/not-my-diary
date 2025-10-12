@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
-import './App.css'
+import { useState, useEffect } from 'react';
+import './App.css';
 import Login from './components/Login';
 import CenteredModal from './components/CenteredModal';
+import { dateToTimestampString, timestampStringToLocalTime } from './utils/time.tsx';
 
 interface Entry {
   timestamp: string;
@@ -84,23 +85,9 @@ function App() {
     setToken(localStorage.getItem("token"));
     loadEntries();
   };
-
-  const formatTimestamp = (date: Date) =>
-    date.toISOString().replace("T", " ");
-
-  const formatLocalTime = (utcString: string) => {
-    return new Date(utcString).toLocaleString([], {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",      
-    });
-  };
   
   const addEntry = (text: string) => {
-    const newEntry = { timestamp: formatTimestamp(new Date()), text, userId: userId || 0};
+    const newEntry = { timestamp: dateToTimestampString(new Date()), text, userId: userId || 0};
     setEntries((prev) => [...prev, newEntry]);
     setInput("");
   };
@@ -151,7 +138,7 @@ function App() {
           <div id="entries">
             {entries.map((entry, idx) => (
               <div key={idx} className="entry">
-                <span className="timestamp" onClick={() => ToggleTimestampsVisibility()}>[{formatLocalTime(entry.timestamp)}]</span>
+                <span className="timestamp" onClick={() => ToggleTimestampsVisibility()}>[{timestampStringToLocalTime(entry.timestamp)}]</span>
                 <span className="text">{entry.text}</span>
               </div>
             ))}
