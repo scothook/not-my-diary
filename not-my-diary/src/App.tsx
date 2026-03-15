@@ -1,5 +1,5 @@
 import './App.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Login from './components/Login';
 import CenteredModal from './components/CenteredModal';
 import { useEntries } from './hooks/useEntries';
@@ -9,11 +9,16 @@ import { dateToTimestampString, timestampStringToLocalTime } from './utils/time.
 import { isTokenValid } from './utils/jwt.ts';
 
 function App() {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const entriesContainerRef = useRef<HTMLDivElement | null>(null);
   const { token, userId } = useAuth();
   const { entries, setEntries, loadEntries, saveNewEntries } = useEntries(token);
   const [input, setInput] = useState<string>('');
   const [timestampsVisible, setTimestampsVisible] = useState<boolean>(true);
-  
+  const [displayCount, setDisplayCount] = useState<number>(20);
+  const hasScrolledAtLoad = useRef(false);
+  const PAGE_SIZE = 20;
+
   const addEntry = (text: string) => {
     const newEntry = { timestamp: dateToTimestampString(new Date()), text, userId: userId || 0};
     setEntries(prev => [...prev, newEntry]);
@@ -22,6 +27,7 @@ function App() {
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
+      e.preventDefault();
       addEntry(input);
     }
   };
@@ -40,12 +46,33 @@ function App() {
     setTimestampsVisible(!timestampsVisible);
   }
 
+  const visibleEntries = entries.slice(-displayCount);
+
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if(isTokenValid(token)) {
+    const tokenFromStorage = localStorage.getItem("token");
+    if (isTokenValid(tokenFromStorage)) {
       loadEntries();
     }
+  }, [loadEntries]);
+
+  useEffect(() => {
+    if (!inputRef.current) return;
+    inputRef.current.focus();
   }, []);
+
+  useEffect(() => {
+    if (hasScrolledAtLoad.current) return;
+    hasScrolledAtLoad.current = true;
+    const timer = setTimeout(() => {
+      if (entriesContainerRef.current) {
+        entriesContainerRef.current.scrollTop = entriesContainerRef.current.scrollHeight;
+      }
+    }, 50);
+    return () => clearTimeout(timer);
+  }, [entries]);
+
+  const hasMoreEntries = entries.length > displayCount;
+  const loadOlderEntries = () => setDisplayCount(prev => Math.min(entries.length, prev + PAGE_SIZE));
 
   return (
     <>
@@ -57,8 +84,11 @@ function App() {
       {timestampsVisible ? (
         // visible timestamps
         <>
-          <div id="entries">
-            {entries.map((entry, idx) => (
+          <div id="entries" ref={entriesContainerRef}>
+            {hasMoreEntries && (
+              <div className="loadOlder" onClick={loadOlderEntries}>⏫ Load older entries</div>
+            )}
+            {visibleEntries.map((entry, idx) => (
               <div key={idx} className="entry">
                 <span className="timestamp" onClick={() => ToggleTimestampsVisibility()}>[{timestampStringToLocalTime(entry.timestamp)}]</span>
                 <span className="text">{entry.text}</span>
@@ -68,19 +98,22 @@ function App() {
           <div className="inputRow">
             <span className="timestamp" onClick={() => ToggleTimestampsVisibility()}></span>
             <input
+              ref={inputRef}
               className="input"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyPress}
-              autoFocus
             />
           </div>
         </>
       ) : (
         // hidden timestamps
         <>
-          <div id="entriesNoTimestamps">
-            {entries.map((entry, idx) => (
+          <div id="entriesNoTimestamps" ref={entriesContainerRef}>
+            {hasMoreEntries && (
+              <div className="loadOlder" onClick={loadOlderEntries}>⏫ Load older entries</div>
+            )}
+            {visibleEntries.map((entry, idx) => (
               <div key={idx} className="entry">
                 <span className="timestamp" onClick={() => ToggleTimestampsVisibility()}>[]</span>
                 <span className="text">{entry.text}</span>
@@ -90,11 +123,11 @@ function App() {
           <div className="inputRowNoTimestamps">
             <span className="timestamp" onClick={() => ToggleTimestampsVisibility()}></span>
             <input
+              ref={inputRef}
               className="input"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyPress}
-              autoFocus
             />
           </div>
         </>
