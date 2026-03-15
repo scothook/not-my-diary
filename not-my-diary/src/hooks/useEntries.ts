@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 export interface Entry {
   timestamp: string;
@@ -9,7 +9,7 @@ export interface Entry {
 export function useEntries(token: string | null) {
   const [entries, setEntries] = useState<Entry[]>([]);
 
-  const loadEntries = async () => {
+  const loadEntries = useCallback(async () => {
     if (!token) return;
     try {
       const response = await fetch("https://not-my-diary-backend-production.up.railway.app/api/entries/", {
@@ -29,13 +29,13 @@ export function useEntries(token: string | null) {
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [token]);
 
-  const saveNewEntries = async (newEntries: Entry[]) => {
+  const saveNewEntries = useCallback(async (newEntries: Entry[]) => {
     if (!token) return;
     const res = await fetch("https://not-my-diary-backend-production.up.railway.app/api/entries/batch", {
       method: "POST",
-      headers: { 
+      headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,
       },
@@ -43,7 +43,7 @@ export function useEntries(token: string | null) {
     });
     if (!res.ok) throw new Error("Failed to save new entries");
     return await res.json();
-  };
+  }, [token]);
 
   return { entries, setEntries, loadEntries, saveNewEntries };
 }

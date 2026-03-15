@@ -1,1 +1,3 @@
 This project is a lightweight diary and notes app, taking features I like from other text editors and notes apps and removing absolutely everything else.
+
+Thanks.
