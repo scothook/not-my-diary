@@ -1,97 +1,158 @@
 body {
-  font-family: monospace;
-  background: #f8f9fa;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background: #ffffff;
+  color: #333333;
+  line-height: 1.6;
+  margin: 0;
   padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
 }
+
 .inputRow {
-  display: grid;
-  grid-template-columns: 27ch 1fr;
+  display: flex;
+  align-items: center;
+  margin-top: 0px;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 0px;
 }
+
 .inputRowNoTimestamps {
-  display: grid;
-  grid-template-columns: 4ch 1fr;
+  display: flex;
+  align-items: center;
+  margin-top: 0px;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 0px;
 }
+
 .input {
-  font-family: monospace;
+  font-family: inherit;
   font-size: 1em;
   flex: 1;
   border: none;
   outline: none;
   background: transparent;
-  padding: 0;
-  padding-left: 10px;
+  padding: 0px 0;
   margin: 0;
-  cursor: pointer;
+  color: #333333;
 }
+
 .input:hover {
-  background: #cbe1f5;
+  background: rgba(37, 99, 235, 0.1);
 }
+
 #entries, #entriesNoTimestamps {
-  display: grid;
-  grid-template-columns: 27ch 1fr;
-  max-height: 55vh;
+  margin-bottom: 0px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  max-height: 60vh;
   overflow-y: auto;
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  padding: 4px;
-  background: #fff;
+  overflow-x: auto;
 }
-#entriesNoTimestamps {
-  grid-template-columns: 4ch 1fr;
-  padding-right: 10px;
-}
+
 .loadOlder {
-  grid-column: 1 / -1;
   cursor: pointer;
-  color: #555;
-  padding: 6px;
-  margin-bottom: 4px;
-  border-bottom: 1px dashed #aaa;
-  font-size: 0.85em;
+  color: #666666;
+  padding: 12px 0;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 0.9em;
   text-align: center;
-  background: #f8f8f8;
+  background: transparent;
+  transition: color 0.2s ease;
 }
+
+.loadOlder:hover {
+  color: #2563eb;
+}
+
 .entry {
-  display: contents;
+  display: flex;
+  align-items: flex-start;
+  border-bottom: 1px solid #f0f0f0;
 }
+
 .timestamp {
-  color: #888;
-  border-right: 1px solid #aaa;
-  padding-right: 10px;
+  color: #666666;
+  font-size: 0.85em;
+  width: 200px;
+  flex-shrink: 0;
   cursor: pointer;
+  font-weight: 500;
+  margin-right: 12px;
 }
+
 .text {
-  white-space: pre-wrap;
-  padding-left: 10px;
+  white-space: nowrap;
+  color: #333333;
+  line-height: 1.6;
 }
+
 .text:hover {
-  background: #cbe1f5;
+  background: rgba(37, 99, 235, 0.05);
 }
 
 .saveButton {
   position: fixed;
-  top: 16px;
-  right: 16px;
-  z-index: 1000; /* keep it above everything */
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: #2563eb; /* blue */
+  background: #2563eb;
   color: white;
   border: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.1s ease;
-  font-size: x-large;
+  transition: all 0.2s ease;
+  font-size: 1.2em;
 }
 
 .saveButton:hover {
   background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .saveButton:active {
   transform: scale(0.95);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  body {
+    padding: 16px;
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+
+  .saveButton {
+    top: 16px;
+    right: 16px;
+    width: 44px;
+    height: 44px;
+    font-size: 1.1em;
+  }
+
+  .entry {
+    margin-bottom: 0px;
+    padding: 0px 0;
+  }
+
+  .timestamp {
+    font-size: 0.8em;
+    margin-right: 8px;
+  }
+
+  .text {
+    font-size: 1em;
+  }
+
+  #entries, #entriesNoTimestamps {
+    max-height: 70vh;
+  }
 }

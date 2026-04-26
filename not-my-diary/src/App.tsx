@@ -86,17 +86,17 @@ function App() {
         <>
           <div id="entries" ref={entriesContainerRef}>
             {hasMoreEntries && (
-              <div className="loadOlder" onClick={loadOlderEntries}>⏫ Load older entries</div>
+              <div className="loadOlder" onClick={loadOlderEntries}>⏫</div>
             )}
             {visibleEntries.map((entry, idx) => (
-              <div key={idx} className="entry">
-                <span className="timestamp" onClick={() => ToggleTimestampsVisibility()}>[{timestampStringToLocalTime(entry.timestamp)}]</span>
-                <span className="text">{entry.text}</span>
+              <div key={idx} className="entry" onClick={() => ToggleTimestampsVisibility()}>
+                <span className="timestamp">[{timestampStringToLocalTime(entry.timestamp)}]</span>
+                <span className="text">{entry.text || '\u00A0'}</span>
               </div>
             ))}
           </div>
           <div className="inputRow">
-            <span className="timestamp" onClick={() => ToggleTimestampsVisibility()}></span>
+            <span className="timestamp"></span>
             <input
               ref={inputRef}
               className="input"
@@ -111,17 +111,15 @@ function App() {
         <>
           <div id="entriesNoTimestamps" ref={entriesContainerRef}>
             {hasMoreEntries && (
-              <div className="loadOlder" onClick={loadOlderEntries}>⏫ Load older entries</div>
+              <div className="loadOlder" onClick={loadOlderEntries}>⏫</div>
             )}
             {visibleEntries.map((entry, idx) => (
-              <div key={idx} className="entry">
-                <span className="timestamp" onClick={() => ToggleTimestampsVisibility()}>[]</span>
-                <span className="text">{entry.text}</span>
+              <div key={idx} className="entry" onClick={() => ToggleTimestampsVisibility()}>
+                <span className="text">{entry.text || '\u00A0'}</span>
               </div>
             ))}
           </div>
           <div className="inputRowNoTimestamps">
-            <span className="timestamp" onClick={() => ToggleTimestampsVisibility()}></span>
             <input
               ref={inputRef}
               className="input"
