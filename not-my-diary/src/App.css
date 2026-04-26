@@ -13,7 +13,7 @@ body {
   display: flex;
   align-items: center;
   margin-top: 0px;
-  border-top: 1px solid #f0f0f0;
+  border-top: 0px solid #f0f0f0;
   padding-top: 0px;
 }
 
@@ -21,7 +21,7 @@ body {
   display: flex;
   align-items: center;
   margin-top: 0px;
-  border-top: 1px solid #f0f0f0;
+  border-top: 0px solid #f0f0f0;
   padding-top: 0px;
 }
 
@@ -56,7 +56,7 @@ body {
   color: #666666;
   padding: 12px 0;
   margin-bottom: 8px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 0px solid #e0e0e0;
   font-size: 0.9em;
   text-align: center;
   background: transparent;
@@ -70,7 +70,7 @@ body {
 .entry {
   display: flex;
   align-items: flex-start;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 0px solid #f0f0f0;
 }
 
 .timestamp {
