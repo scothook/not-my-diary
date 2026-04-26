@@ -12,17 +12,17 @@ body {
 .inputRow {
   display: flex;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 0px;
   border-top: 1px solid #f0f0f0;
-  padding-top: 16px;
+  padding-top: 0px;
 }
 
 .inputRowNoTimestamps {
   display: flex;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 0px;
   border-top: 1px solid #f0f0f0;
-  padding-top: 16px;
+  padding-top: 0px;
 }
 
 .input {
@@ -32,7 +32,7 @@ body {
   border: none;
   outline: none;
   background: transparent;
-  padding: 8px 0;
+  padding: 0px 0;
   margin: 0;
   color: #333333;
 }
@@ -42,7 +42,7 @@ body {
 }
 
 #entries, #entriesNoTimestamps {
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   background: transparent;
   border: none;
   padding: 0;
@@ -149,7 +149,7 @@ body {
   }
 
   .text {
-    font-size: 0.95em;
+    font-size: 1em;
   }
 
   #entries, #entriesNoTimestamps {

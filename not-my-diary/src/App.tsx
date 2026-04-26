@@ -91,7 +91,7 @@ function App() {
             {visibleEntries.map((entry, idx) => (
               <div key={idx} className="entry" onClick={() => ToggleTimestampsVisibility()}>
                 <span className="timestamp">[{timestampStringToLocalTime(entry.timestamp)}]</span>
-                <span className="text">{entry.text}</span>
+                <span className="text">{entry.text || '\u00A0'}</span>
               </div>
             ))}
           </div>
@@ -115,7 +115,7 @@ function App() {
             )}
             {visibleEntries.map((entry, idx) => (
               <div key={idx} className="entry" onClick={() => ToggleTimestampsVisibility()}>
-                <span className="text">{entry.text}</span>
+                <span className="text">{entry.text || '\u00A0'}</span>
               </div>
             ))}
           </div>
