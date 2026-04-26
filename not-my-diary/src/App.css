@@ -26,14 +26,30 @@ body {
 .input:hover {
   background: #cbe1f5;
 }
-#entries {
+#entries, #entriesNoTimestamps {
   display: grid;
   grid-template-columns: 27ch 1fr;
+  max-height: 55vh;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  padding: 4px;
+  background: #fff;
 }
 #entriesNoTimestamps {
-  display: grid;
   grid-template-columns: 4ch 1fr;
   padding-right: 10px;
+}
+.loadOlder {
+  grid-column: 1 / -1;
+  cursor: pointer;
+  color: #555;
+  padding: 6px;
+  margin-bottom: 4px;
+  border-bottom: 1px dashed #aaa;
+  font-size: 0.85em;
+  text-align: center;
+  background: #f8f8f8;
 }
 .entry {
   display: contents;
