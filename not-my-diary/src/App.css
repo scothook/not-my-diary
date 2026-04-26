@@ -44,7 +44,7 @@ body {
 #entries, #entriesNoTimestamps {
   margin-bottom: 0px;
   background: transparent;
-  border: none;
+  border-top: 1px solid #f0f0f0;
   padding: 0;
   max-height: 60vh;
   overflow-y: auto;
