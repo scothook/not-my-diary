@@ -48,6 +48,7 @@ body {
   padding: 0;
   max-height: 60vh;
   overflow-y: auto;
+  overflow-x: auto;
 }
 
 .loadOlder {
@@ -75,13 +76,15 @@ body {
 .timestamp {
   color: #666666;
   font-size: 0.85em;
-  margin-right: 12px;
+  width: 200px;
+  flex-shrink: 0;
   cursor: pointer;
   font-weight: 500;
+  margin-right: 12px;
 }
 
 .text {
-  white-space: pre-wrap;
+  white-space: nowrap;
   color: #333333;
   line-height: 1.6;
 }
