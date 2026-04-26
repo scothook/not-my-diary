@@ -36,8 +36,8 @@ function App() {
 
   function SaveButton({ onSave }: { onSave: () => void}) {
     return (
-      <button className="saveButton" onClick={onSave}>
-        🖫
+      <button className="saveButton" onClick={onSave} aria-label="Save entries">
+        💾
       </button>
     );
   }
