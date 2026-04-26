@@ -2,6 +2,8 @@ import './App.css';
 import { useState, useEffect, useRef } from 'react';
 import Login from './components/Login';
 import CenteredModal from './components/CenteredModal';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import SaveRoundedIcon from '@mui/icons-material/SaveRounded';
 import { useEntries } from './hooks/useEntries';
 import { useDebouncedSave } from './hooks/useDebouncedSave.ts';
 import { useAuth } from './hooks/useAuth.ts';
@@ -37,7 +39,7 @@ function App() {
   function SaveButton({ onSave }: { onSave: () => void}) {
     return (
       <button className="saveButton" onClick={onSave} aria-label="Save entries">
-        💾
+        <SaveRoundedIcon/>
       </button>
     );
   }
@@ -86,7 +88,9 @@ function App() {
         <>
           <div id="entries" ref={entriesContainerRef}>
             {hasMoreEntries && (
-              <div className="loadOlder" onClick={loadOlderEntries}>⏫</div>
+              <div className="loadOlder" onClick={loadOlderEntries}>
+                <KeyboardArrowUpIcon />
+              </div>
             )}
             {visibleEntries.map((entry, idx) => (
               <div key={idx} className="entry" onClick={() => ToggleTimestampsVisibility()}>
