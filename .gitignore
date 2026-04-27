@@ -29,5 +29,6 @@ dist-ssr
 # Environment Variables/Secrets
 .env
 
-# Entry Archive
+# Misc
 entry-archive
+scripts
