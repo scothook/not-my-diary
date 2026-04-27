@@ -17,7 +17,7 @@ function App() {
   const { entries, setEntries, loadEntries, saveNewEntries } = useEntries(token);
   const [input, setInput] = useState<string>('');
   const [timestampsVisible, setTimestampsVisible] = useState<boolean>(true);
-  const [displayCount, setDisplayCount] = useState<number>(20);
+  const [displayCount, setDisplayCount] = useState<number>(16);
   const hasScrolledAtLoad = useRef(false);
   const PAGE_SIZE = 20;
 
