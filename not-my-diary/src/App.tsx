@@ -115,7 +115,9 @@ function App() {
         <>
           <div id="entriesNoTimestamps" ref={entriesContainerRef}>
             {hasMoreEntries && (
-              <div className="loadOlder" onClick={loadOlderEntries}>⏫</div>
+              <div className="loadOlder" onClick={loadOlderEntries}>
+                <KeyboardArrowUpIcon />
+              </div>
             )}
             {visibleEntries.map((entry, idx) => (
               <div key={idx} className="entry" onClick={() => ToggleTimestampsVisibility()}>
