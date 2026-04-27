@@ -16,7 +16,7 @@ function App() {
   const { token, userId } = useAuth();
   const { entries, setEntries, loadEntries, saveNewEntries } = useEntries(token);
   const [input, setInput] = useState<string>('');
-  const [timestampsVisible, setTimestampsVisible] = useState<boolean>(true);
+  const [timestampsVisible, setTimestampsVisible] = useState<boolean>(false);
   const [displayCount, setDisplayCount] = useState<number>(16);
   const hasScrolledAtLoad = useRef(false);
   const PAGE_SIZE = 20;
