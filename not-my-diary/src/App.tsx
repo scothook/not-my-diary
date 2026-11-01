@@ -1,5 +1,5 @@
 import './App.css';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Login from './components/Login';
 import CenteredModal from './components/CenteredModal';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -13,8 +13,11 @@ import { isTokenValid } from './utils/jwt.ts';
 function App() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const entriesContainerRef = useRef<HTMLDivElement | null>(null);
+  const pendingEntriesRef = useRef<typeof entries>([]);
+  const isSavingPendingRef = useRef(false);
   const { token, userId } = useAuth();
   const { entries, setEntries, loadEntries, saveNewEntries } = useEntries(token);
+  const [pendingEntries, setPendingEntries] = useState<typeof entries>([]);
   const [input, setInput] = useState<string>('');
   const [timestampsVisible, setTimestampsVisible] = useState<boolean>(false);
   const [displayCount, setDisplayCount] = useState<number>(16);
@@ -24,6 +27,8 @@ function App() {
   const addEntry = (text: string) => {
     const newEntry = { timestamp: dateToTimestampString(new Date()), text, userId: userId || 0};
     setEntries(prev => [...prev, newEntry]);
+    pendingEntriesRef.current = [...pendingEntriesRef.current, newEntry];
+    setPendingEntries(pendingEntriesRef.current);
     setInput("");
   };
 
@@ -34,7 +39,27 @@ function App() {
     }
   };
 
-  useDebouncedSave(entries, 5000, saveNewEntries);
+  const flushPendingEntries = useCallback(async () => {
+    if (!token || isSavingPendingRef.current) return;
+
+    isSavingPendingRef.current = true;
+    try {
+      while (pendingEntriesRef.current.length > 0) {
+        const batch = [...pendingEntriesRef.current];
+        await saveNewEntries(batch);
+
+        const savedEntries = new Set(batch);
+        pendingEntriesRef.current = pendingEntriesRef.current.filter(entry => !savedEntries.has(entry));
+        setPendingEntries(pendingEntriesRef.current);
+      }
+    } catch (error) {
+      console.error("Failed to save pending entries:", error);
+    } finally {
+      isSavingPendingRef.current = false;
+    }
+  }, [saveNewEntries, token]);
+
+  useDebouncedSave(pendingEntries, 5000, flushPendingEntries);
 
   function SaveButton({ onSave }: { onSave: () => void}) {
     return (
@@ -79,7 +104,7 @@ function App() {
   return (
     <>
       <h2>not my diary</h2>
-      <SaveButton onSave={() => saveNewEntries(entries)}/>
+      <SaveButton onSave={flushPendingEntries}/>
       <CenteredModal isOpen={!isTokenValid(token)} onClose={() => {}} title="Login">
         <Login />
       </CenteredModal>
