@@ -45,6 +45,7 @@ export default function Login() {
           <input
             type="email"
             id="login-email"
+            autoFocus
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="username"

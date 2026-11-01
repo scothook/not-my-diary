@@ -83,9 +83,10 @@ function App() {
   }, [loadEntries]);
 
   useEffect(() => {
+    if (!isTokenValid(token)) return;
     if (!inputRef.current) return;
     inputRef.current.focus();
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     if (hasScrolledAtLoad.current) return;
