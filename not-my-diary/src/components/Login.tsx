@@ -37,29 +37,39 @@ export default function Login() {
   };
 
   return (
-    <div className="login-container" style={{ maxWidth: 300, margin: "auto" }}>
+    <div className={styles.login}>
+      <p className={styles.eyebrow}>Not My Diary</p>
       <form onSubmit={handleLogin}>
-        <div>
-          <label>Email:</label>
+        <div className={styles.formGroup}>
+          <label htmlFor="login-email">Email address</label>
           <input
             type="email"
+            id="login-email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            autoComplete="username"
+            placeholder="you@example.com"
             required
           />
         </div>
-        <div>
-          <label>Password:</label>
+        <div className={styles.formGroup}>
+          <label htmlFor="login-password">Password</label>
           <input
             type="password"
+            id="login-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
+            placeholder="Enter your password"
             required
           />
         </div>
-        <button type="submit" className={styles.button}>Login</button>
+        <div className={styles.actions}>
+          <button type="submit" className={styles.button}>Login</button>
+          <button type="button" className={styles.demoButton}>Demo</button>
+        </div>
       </form>
-      {error && <p className={styles.error}>{error}</p>}
+      {error && <p className={styles.error} role="alert">{error}</p>}
     </div>
   );
 }
