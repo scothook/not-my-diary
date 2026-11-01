@@ -7,7 +7,11 @@ require('dotenv').config({ path: './.env' });
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const JWT_SECRET = process.env.JWT_SECRET || "jwt_secret";
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!JWT_SECRET) {
+  throw new Error("JWT_SECRET environment variable is required");
+}
 
 app.use(cors()); // Allow cross-origin requests
 app.use(express.json()); // Middleware to parse JSON
