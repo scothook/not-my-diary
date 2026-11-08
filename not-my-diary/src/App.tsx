@@ -1,8 +1,10 @@
 import './App.css';
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import Login from './components/Login';
 import CenteredModal from './components/CenteredModal';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
 import SaveRoundedIcon from '@mui/icons-material/SaveRounded';
 import { useEntries } from './hooks/useEntries';
 import { useDebouncedSave } from './hooks/useDebouncedSave.ts';
@@ -108,6 +110,30 @@ function App() {
       loadEntries();
     }
   }, [loadEntries]);
+
+  useEffect(() => {
+    const favicon = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
+    if (!favicon) return;
+
+    const fallbackHref = favicon.href;
+    const colorScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    const updateFavicon = () => {
+      const color = colorScheme.matches ? '#f7f7f7' : '#1e1e1e';
+      const icon = renderToStaticMarkup(<MenuBookOutlinedIcon aria-hidden="true" />);
+      const svg = icon.replace(
+        '<svg ',
+        `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="${color}" `
+      );
+      favicon.href = `data:image/svg+xml,${encodeURIComponent(svg)}`;
+    };
+
+    updateFavicon();
+    colorScheme.addEventListener('change', updateFavicon);
+    return () => {
+      colorScheme.removeEventListener('change', updateFavicon);
+      favicon.href = fallbackHref;
+    };
+  }, []);
 
   useEffect(() => {
     if (!isTokenValid(token)) return;
