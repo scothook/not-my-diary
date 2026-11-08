@@ -4,11 +4,12 @@ import styles from "./CenteredModal.module.css";
 type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  isClosable?: boolean;
   title?: string;
   children?: React.ReactNode;
 };
 
-export default function CenteredModal({ isOpen, onClose, title, children }: ModalProps) {
+export default function CenteredModal({ isOpen, onClose, isClosable = true, title, children }: ModalProps) {
   useEffect(() => {
     if (!isOpen) return;
 
@@ -44,13 +45,15 @@ export default function CenteredModal({ isOpen, onClose, title, children }: Moda
       >
         <div className={styles.header}>
           <h2 className={styles.title}>{title ?? "Modal Title"}</h2>
-          <button
-            onClick={onClose}
-            aria-label="Close modal"
-            className={styles.closeButton}
-          >
-            ✕
-          </button>
+          {isClosable && (
+            <button
+              onClick={onClose}
+              aria-label="Close modal"
+              className={styles.closeButton}
+            >
+              ✕
+            </button>
+          )}
         </div>
 
         <div className={styles.content}>{children}</div>

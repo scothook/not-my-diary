@@ -38,7 +38,6 @@ export default function Login() {
 
   return (
     <div className={styles.login}>
-      <p className={styles.eyebrow}>Not My Diary</p>
       <form onSubmit={handleLogin}>
         <div className={styles.formGroup}>
           <label htmlFor="login-email">Email address</label>

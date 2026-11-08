@@ -106,7 +106,7 @@ function App() {
     <>
       <h2>not my diary</h2>
       <SaveButton onSave={flushPendingEntries}/>
-      <CenteredModal isOpen={!isTokenValid(token)} onClose={() => {}} title="Login">
+      <CenteredModal isOpen={!isTokenValid(token)} onClose={() => {}} isClosable={false} title="not my diary">
         <Login />
       </CenteredModal>
       {timestampsVisible ? (
