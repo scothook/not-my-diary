@@ -21,7 +21,6 @@ function App() {
   const [input, setInput] = useState<string>('');
   const [timestampsVisible, setTimestampsVisible] = useState<boolean>(true);
   const [displayCount, setDisplayCount] = useState<number>(16);
-  const hasScrolledAtLoad = useRef(false);
   const PAGE_SIZE = 20;
   const today = new Date();
 
@@ -97,14 +96,8 @@ function App() {
   }, [token]);
 
   useEffect(() => {
-    if (hasScrolledAtLoad.current) return;
-    hasScrolledAtLoad.current = true;
-    const timer = setTimeout(() => {
-      if (entriesContainerRef.current) {
-        entriesContainerRef.current.scrollTop = entriesContainerRef.current.scrollHeight;
-      }
-    }, 50);
-    return () => clearTimeout(timer);
+    if (!entriesContainerRef.current) return;
+    entriesContainerRef.current.scrollTop = entriesContainerRef.current.scrollHeight;
   }, [entries]);
 
   const hasMoreEntries = entries.length > displayCount;
@@ -164,17 +157,17 @@ function App() {
                 <span className="text">{entry.text || '\u00A0'}</span>
               </div>
             ))}
-          </div>
-          <div className="inputRow">
-            <span className="timestamp" aria-hidden="true" />
-            <input
-              ref={inputRef}
-              className="input"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyPress}
-              aria-label="Write a diary entry"
-            />
+            <div className="inputRow">
+              <span className="timestamp" aria-hidden="true" />
+              <input
+                ref={inputRef}
+                className="input"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyPress}
+                aria-label="Write a diary entry"
+              />
+            </div>
           </div>
         </section>
       </main>
