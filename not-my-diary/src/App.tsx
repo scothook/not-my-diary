@@ -10,6 +10,8 @@ import { useAuth } from './hooks/useAuth.ts';
 import { dateToTimestampString, timestampStringToLocalTime } from './utils/time.ts';
 import { isTokenValid } from './utils/jwt.ts';
 
+type SaveStatus = 'saved' | 'autosaved';
+
 function App() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const entriesContainerRef = useRef<HTMLDivElement | null>(null);
@@ -19,6 +21,7 @@ function App() {
   const { entries, setEntries, loadEntries, saveNewEntries } = useEntries(token);
   const [pendingEntries, setPendingEntries] = useState<typeof entries>([]);
   const [input, setInput] = useState<string>('');
+  const [saveStatus, setSaveStatus] = useState<SaveStatus | null>(null);
   const [timestampsVisible, setTimestampsVisible] = useState<boolean>(true);
   const [displayCount, setDisplayCount] = useState<number>(16);
   const PAGE_SIZE = 20;
@@ -39,9 +42,10 @@ function App() {
     }
   };
 
-  const flushPendingEntries = useCallback(async () => {
+  const flushPendingEntries = useCallback(async (confirmation: SaveStatus = 'autosaved') => {
     if (!token || isSavingPendingRef.current) return;
 
+    setSaveStatus(null);
     isSavingPendingRef.current = true;
     try {
       while (pendingEntriesRef.current.length > 0) {
@@ -52,6 +56,7 @@ function App() {
         pendingEntriesRef.current = pendingEntriesRef.current.filter(entry => !savedEntries.has(entry));
         setPendingEntries(pendingEntriesRef.current);
       }
+      setSaveStatus(confirmation);
     } catch (error) {
       console.error("Failed to save pending entries:", error);
     } finally {
@@ -59,19 +64,34 @@ function App() {
     }
   }, [saveNewEntries, token]);
 
-  useDebouncedSave(pendingEntries, 5000, flushPendingEntries);
+  const flushPendingEntriesAutomatically = useCallback(
+    () => flushPendingEntries('autosaved'),
+    [flushPendingEntries]
+  );
 
-  function SaveButton({ onSave }: { onSave: () => void}) {
+  useDebouncedSave(pendingEntries, 5000, flushPendingEntriesAutomatically);
+
+  const handleManualSave = async () => {
+    inputRef.current?.focus();
+    await flushPendingEntries('saved');
+  };
+
+  useEffect(() => {
+    if (!saveStatus) return;
+    const timer = window.setTimeout(() => setSaveStatus(null), 1200);
+    return () => window.clearTimeout(timer);
+  }, [saveStatus]);
+
+  function SaveButton({ status, onSave }: { status: SaveStatus | null; onSave: () => void }) {
     return (
       <button
-        className="saveButton"
-        onClick={() => {
-          onSave();
-          inputRef.current?.focus();
-        }}
+        className={`saveButton${status ? ' isSaved' : ''}`}
+        onClick={onSave}
       >
         <SaveRoundedIcon/>
-        <span>Save</span>
+        <span aria-live="polite">
+          {status === 'autosaved' ? 'Autosaved' : status === 'saved' ? 'Saved' : 'Save'}
+        </span>
       </button>
     );
   }
@@ -120,7 +140,7 @@ function App() {
           </span>
         </div>
         <div className="sidebarFooter">
-          <SaveButton onSave={flushPendingEntries} />
+          <SaveButton status={saveStatus} onSave={handleManualSave} />
         </div>
       </aside>
 

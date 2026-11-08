@@ -93,7 +93,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 17px;
-  width: 70%;
+  width: 80%;
   min-height: 54px;
   padding: 0 17px;
   border: 1px solid #e2e2e2;
@@ -104,12 +104,23 @@ body {
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
-  transition: background-color 140ms ease, border-color 140ms ease;
+  transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease;
 }
 
 .saveButton:hover {
   border-color: #ffffff;
   background: #2a2a2a;
+}
+
+.saveButton.isSaved {
+  border-color: #68a878;
+  background: rgba(46, 125, 50, 0.12);
+  color: #9de0a9;
+}
+
+.saveButton.isSaved:hover {
+  border-color: #8bc99a;
+  background: rgba(46, 125, 50, 0.18);
 }
 
 .saveButton:focus-visible,
