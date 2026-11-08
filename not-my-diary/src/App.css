@@ -164,6 +164,34 @@ body {
   text-transform: uppercase;
 }
 
+.previousEntriesButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+  padding: 4px 0;
+  border: 0;
+  background: transparent;
+  color: #777777;
+  font: inherit;
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+
+.previousEntriesButton:hover:not(:disabled) {
+  color: #222222;
+}
+
+.previousEntriesButton:disabled {
+  color: #b0b0b0;
+  cursor: default;
+}
+
+.previousEntriesButton svg {
+  width: 18px;
+  height: 18px;
+}
+
 .timestampToggle {
   flex: 0 0 auto;
   padding: 4px 0;

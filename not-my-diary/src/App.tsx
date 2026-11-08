@@ -116,21 +116,19 @@ function App() {
     if (!favicon) return;
 
     const fallbackHref = favicon.href;
-    const colorScheme = window.matchMedia('(prefers-color-scheme: dark)');
-    const updateFavicon = () => {
-      const color = colorScheme.matches ? '#f7f7f7' : '#1e1e1e';
-      const icon = renderToStaticMarkup(<MenuBookOutlinedIcon aria-hidden="true" />);
-      const svg = icon.replace(
+    const icon = renderToStaticMarkup(<MenuBookOutlinedIcon aria-hidden="true" />);
+    const svg = icon
+      .replace(
         '<svg ',
-        `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="${color}" `
+        '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" '
+      )
+      .replace(
+        '>',
+        '><style>svg{color:#1e1e1e}@media(prefers-color-scheme:dark){svg{color:#f7f7f7}}</style>'
       );
-      favicon.href = `data:image/svg+xml,${encodeURIComponent(svg)}`;
-    };
+    favicon.href = `data:image/svg+xml,${encodeURIComponent(svg)}`;
 
-    updateFavicon();
-    colorScheme.addEventListener('change', updateFavicon);
     return () => {
-      colorScheme.removeEventListener('change', updateFavicon);
       favicon.href = fallbackHref;
     };
   }, []);
@@ -183,6 +181,19 @@ function App() {
           >
             {timestampsVisible ? 'Hide timestamps' : 'Show timestamps'}
           </button>
+          <button
+            className="previousEntriesButton"
+            type="button"
+            onClick={() => {
+              loadOlderEntries();
+              inputRef.current?.focus();
+            }}
+            disabled={!hasMoreEntries}
+            aria-label="View more previous entries"
+          >
+            <KeyboardArrowUpIcon aria-hidden="true" />
+            <span>View more previous entries</span>
+          </button>
         </header>
 
         <section
@@ -190,11 +201,6 @@ function App() {
           aria-label="Diary entries"
         >
           <div id="entries" ref={entriesContainerRef}>
-            {hasMoreEntries && (
-              <button className="loadOlder" type="button" onClick={loadOlderEntries} aria-label="Load older entries">
-                <KeyboardArrowUpIcon />
-              </button>
-            )}
             {visibleEntries.map((entry, idx) => (
               <div key={idx} className="entry">
                 <span className="timestamp" aria-hidden={!timestampsVisible}>
