@@ -321,6 +321,10 @@ body {
   padding: 0 6px 38px 0;
 }
 
+.mobileSaveFooter {
+  display: none;
+}
+
 .input {
   width: 100%;
   min-width: 0;
@@ -348,8 +352,7 @@ body {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:
-      "brand date"
-      "save save";
+      "brand date";
     align-items: center;
     gap: 14px 18px;
     min-height: 0;
@@ -394,8 +397,37 @@ body {
   }
 
   .sidebarFooter {
-    grid-area: save;
-    margin: 0;
+    display: none;
+  }
+
+  .mobileSaveFooter {
+    display: flex;
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    z-index: 10;
+    transform: translateX(-50%);
+  }
+
+  .mobileSaveFooter .saveButton {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.24);
+  }
+
+  .mobileSaveFooter .saveButton:not(.isSaved) {
+    border-color: #1e1e1e;
+    background: #1e1e1e;
+    color: #ffffff;
+  }
+
+  .mobileSaveFooter .saveButton:not(.isSaved):hover {
+    border-color: #333333;
+    background: #333333;
+    color: #ffffff;
+  }
+
+  .mobileSaveFooter .saveButton.isSaved,
+  .mobileSaveFooter .saveButton.isSaved:hover {
+    background: #1e1e1e;
   }
 
   .saveButton {

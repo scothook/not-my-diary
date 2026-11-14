@@ -224,6 +224,10 @@ function App() {
         </section>
       </main>
 
+      <div className="mobileSaveFooter">
+        <SaveButton status={saveStatus} onSave={handleManualSave} />
+      </div>
+
       <CenteredModal isOpen={!isTokenValid(token)} onClose={() => {}} isClosable={false} title="not my diary">
         <Login />
       </CenteredModal>
