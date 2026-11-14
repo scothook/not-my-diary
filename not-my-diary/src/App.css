@@ -85,15 +85,17 @@ body {
 }
 
 .sidebarFooter {
+  display: flex;
+  justify-content: center;
   margin-top: auto;
 }
 
 .saveButton {
-  display: flex;
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
   align-items: center;
-  justify-content: center;
-  gap: 17px;
-  width: 80%;
+  column-gap: 17px;
+  width: 100%;
   min-height: 54px;
   padding: 0 17px;
   border: 1px solid #e2e2e2;
@@ -133,6 +135,10 @@ body {
 .saveButton svg {
   width: 22px;
   height: 22px;
+}
+
+.saveButton span {
+  text-align: left;
 }
 
 .writingPanel {
