@@ -234,7 +234,13 @@ body {
   scrollbar-width: thin;
 }
 
-#entries::before {
+.entry,
+.inputRow {
+  position: relative;
+}
+
+.entry::before,
+.inputRow::before {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -244,7 +250,8 @@ body {
   pointer-events: none;
 }
 
-.withoutTimestamps #entries::before {
+.withoutTimestamps .entry::before,
+.withoutTimestamps .inputRow::before {
   display: none;
 }
 
@@ -305,7 +312,6 @@ body {
   flex: 0 0 auto;
   min-height: 34px;
   padding: 0 6px 38px 0;
-  border-bottom: 1px solid #e4e4e4;
 }
 
 .input {
