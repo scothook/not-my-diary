@@ -92,10 +92,10 @@ body {
 
 .saveButton {
   display: grid;
-  grid-template-columns: 22px minmax(0, 1fr);
+  grid-template-columns: 22px max-content;
   align-items: center;
   column-gap: 17px;
-  width: 100%;
+  width: max-content;
   min-height: 54px;
   padding: 0 17px;
   border: 1px solid #e2e2e2;
@@ -138,6 +138,7 @@ body {
 }
 
 .saveButton span {
+  white-space: nowrap;
   text-align: left;
 }
 
