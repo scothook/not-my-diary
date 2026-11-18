@@ -3,6 +3,7 @@ const cors = require("cors");
 const { Pool } = require("pg");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 require('dotenv').config({ path: './.env' });
 
 const app = express();
@@ -97,6 +98,28 @@ app.post("/api/login", async (req, res) => {
     res.status(500).json({ error: "Login failed" });
   }
 });
+
+app.post("/api/demo", async (req, res) => {
+  const sessionId = crypto.randomUUID();
+
+  try {
+    const passwordHash = await bcrypt.hash(crypto.randomBytes(32).toString("hex"), 10);
+    const result = await pool.query(
+      "INSERT INTO users (email, password_hash) VALUES ($1, $2) RETURNING id",
+      [`demo-${sessionId}@not-my-diary.invalid`, passwordHash]
+    );
+    const token = jwt.sign(
+      { userId: result.rows[0].id, demo: true },
+      JWT_SECRET,
+      { expiresIn: "15m", jwtid: sessionId }
+    );
+
+    res.status(201).json({ token });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Could not start demo session" });
+  }
+});
 /*
 app.get("/api/entries", authenticateToken, async (req, res) => {
     try {
@@ -129,7 +152,7 @@ app.post("/api/entries/batch", authenticateToken, async (req, res) => {
   const values = [];
   const placeholders = entries.map((e, i) => {
     const base = i * 3;
-    values.push(e.timestamp, e.text, e.userId);
+    values.push(e.timestamp, e.text, req.user.userId);
     return `($${base + 1}, $${base + 2}, $${base + 3})`;
   });
 

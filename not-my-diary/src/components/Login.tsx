@@ -5,17 +5,20 @@ interface LoginResponse {
   token: string;
 }
 
+const API_URL = "https://not-my-diary-backend-production.up.railway.app/api";
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [isStartingDemo, setIsStartingDemo] = useState(false);
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
 
     try {
-      const res = await fetch("https://not-my-diary-backend-production.up.railway.app/api/login", {
+      const res = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -33,6 +36,30 @@ export default function Login() {
       window.location.reload();
     } catch (err) {
       console.error("Network error:", err);
+      setError("Unable to log in. Please try again.");
+    }
+  };
+
+  const handleDemo = async () => {
+    setError(null);
+    setIsStartingDemo(true);
+
+    try {
+      const res = await fetch(`${API_URL}/demo`, { method: "POST" });
+      const data: LoginResponse = await res.json();
+
+      if (!res.ok) {
+        setError("Unable to start a demo session. Please try again.");
+        return;
+      }
+
+      localStorage.setItem("token", data.token);
+      window.location.reload();
+    } catch (err) {
+      console.error("Network error:", err);
+      setError("Unable to start a demo session. Please try again.");
+    } finally {
+      setIsStartingDemo(false);
     }
   };
 
@@ -66,7 +93,14 @@ export default function Login() {
         </div>
         <div className={styles.actions}>
           <button type="submit" className={styles.button}>Login</button>
-          <button type="button" className={styles.demoButton}>Demo</button>
+          <button
+            type="button"
+            className={styles.demoButton}
+            onClick={handleDemo}
+            disabled={isStartingDemo}
+          >
+            {isStartingDemo ? "Starting..." : "Demo"}
+          </button>
         </div>
       </form>
       {error && <p className={styles.error} role="alert">{error}</p>}
