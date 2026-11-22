@@ -25,3 +25,4 @@ Try the live app: [notmydiary.netlify.app](https://notmydiary.netlify.app/) — 
 - **Database:** PostgreSQL, accessed from the backend with parameterized queries.
 - **Authentication:** JSON Web Tokens (JWT) and bcrypt password hashing.
 - **Hosting:** Netlify for the frontend and Railway for the backend and database.
+- **Backup:** Task Scheduler and Powershell script for regular backup saving from database.
