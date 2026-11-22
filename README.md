@@ -2,7 +2,7 @@ Not My Diary is a lightweight, distraction-free diary and notes app built around
 
 Try the live app: [notmydiary.netlify.app](https://notmydiary.netlify.app/) - choose **Demo** to start a temporary session without creating an account.
 
-<img width="602" height="397" alt="Screenshot 2026-11-22 104408" src="https://github.com/user-attachments/assets/3c7f3a28-921a-4d4b-a4ed-2849728cfd1a" />
+<img width="368" height="308" alt="Screenshot 2026-11-22 104333" src="https://github.com/user-attachments/assets/33b3b77f-5bfc-48de-9733-15bf21374626" />
 
 ## Features
 
@@ -16,7 +16,7 @@ Try the live app: [notmydiary.netlify.app](https://notmydiary.netlify.app/) - ch
 - **Automated entry backups:** Timestamped CSV exports archive database entries for recovery.
 - **Automated demo cleanup:** A backend cleanup job deletes demo accounts and their entries once they are more than 15 minutes old.
 
-<img width="368" height="308" alt="Screenshot 2026-11-22 104333" src="https://github.com/user-attachments/assets/33b3b77f-5bfc-48de-9733-15bf21374626" />
+<img width="602" height="397" alt="Screenshot 2026-11-22 104408" src="https://github.com/user-attachments/assets/3c7f3a28-921a-4d4b-a4ed-2849728cfd1a" />
 
 ## Technologies
 
@@ -25,4 +25,4 @@ Try the live app: [notmydiary.netlify.app](https://notmydiary.netlify.app/) - ch
 - **Database:** PostgreSQL, accessed from the backend with parameterized queries.
 - **Authentication:** JSON Web Tokens (JWT) and bcrypt password hashing.
 - **Hosting:** Netlify for the frontend and Railway for the backend and database.
-- **Backup:** Task Scheduler and Powershell script for regular backup saving from database.
+- **Backup:** Task Scheduler and Powershell script for regular backup of database.
