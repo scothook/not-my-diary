@@ -1,4 +1,4 @@
-Not My Diary is a lightweight, distraction-free diary and notes app built around one simple idea: open it and start writing. It brings together timestamped entries, automatic saving, and secure, user-specific sessions without the clutter of a full productivity suite.
+This is a lightweight diary and notes app, taking features I like from other text editors and removing absolutely everything else.
 
 Try the live app: [notmydiary.netlify.app](https://notmydiary.netlify.app/) - choose **Demo** to start a temporary session without creating an account.
 
